@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinNews</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+</head>
+<body>
+    <header class="custom-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <!-- Logo -->
+            <div class="d-flex align-items-center">
+                <img src="image/News.png" alt="WinNews Logo" class="me-3">
+            </div>
+            
+            <!-- Navigation Links -->
+            <nav class="nav">
+                <a class="active" href="{{ route('home') }}">Home</a>
+                <a class="deactive" href="{{ route('news') }}">News</a>
+                <a class="deactive" href="{{ route('domestic') }}">Domestic</a>
+                <a class="deactive" href="{{ route('trending') }}">Trending</a>
+            </nav>
+
+            <!-- Search Bar -->
+            <form class="d-flex ms-3">
+                <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main class="container my-4" style="padding-top: 75px;">
+        <div class="row">
+            <!-- Konten Utama -->
+            <section class="col-md-8">
+            @if($mainNews)
+    <div class="card mb-4">
+        <a href="{{ route('detail', $mainNews->id) }}" class="text-decoration-none text-dark">
+            <img src="{{ $mainNews->image }}" alt="{{ $mainNews->title }}" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ $mainNews->title }}</h5>
+            </div>
+        </a>
+    </div>
+@endif
+
+
+                <!-- Berita Grid -->
+                <div class="row">
+                    @foreach($news as $item)
+                        <div class="col-md-6 mb-4">
+                            <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                                <img src="{{ $item->image }}" alt="{{ $item->title }}" class="img-fluid">
+                                <p>{{ Str::limit($item->title, 100) }}</p>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+
+            <!-- Sidebar (Latest News) -->
+            <aside class="col-md-4">
+                <h3 class="mb-3">Latest News</h3>
+                <ul class="list-group list-group-flush">
+                    @foreach($latestNews as $item)
+                        <li class="list-group-item">
+                            <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                                {{ $item->title }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </aside>
+        </div>
+    </main>
+
+ <!-- Footer -->
+ <footer class="custom-footer" style="background: #D9D9D9; padding-top: 10px;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <img src="{{ asset('image/WinniCode.png') }}" alt="WinNews" class="me-3" style="width: 100%; height: auto;">
+                    <h3 class="mb-0">WinniCode Garuda Teknologi</h3>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <h5>Contact Us:</h5>
+                    <p>
+                        <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://winnicode.com/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-globe me-2"></i>WinniCode
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-3 bg-primary text-white">&copy; 2024 PT WinniCode Garuda Indonesia, All rights reserved</p>
+    </footer>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinNews</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+    <style>
+        .list-group-item {
+            width: 100%;
+        }
+
+        .list-group-item img {
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="custom-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <!-- Logo -->
+            <div class="d-flex align-items-center">
+                <img src="image/News.png" alt="WinNews Logo" class="me-3">
+            </div>
+            
+            <!-- Navigation Links -->
+            <nav class="nav">
+                <a class="deactive" href="{{ route('home') }}">Home</a>
+                <a class="active" href="{{ route('news') }}">News</a>
+                <a class="deactive" href="{{ route('domestic') }}">Domestic</a>
+                <a class="deactive" href="{{ route('trending') }}">Trending</a>
+            </nav>
+
+            <!-- Search Bar -->
+            <form class="d-flex ms-3">
+                <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container-fluid px-5 my-4" style="padding-top: 75px;">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">Latest News</h2>
+                <div class="list-group w-100">
+                    @foreach ($news as $item)
+                        <div class="list-group-item d-flex justify-content-between align-items-center border rounded mb-3 p-3">
+                            <div class="flex-grow-1">
+                                <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                                    <h5 class="fw-bold mb-1">{{ $item->title }}</h5>
+                                    <p>{{ Str::limit($item->content, 100) }}</p>
+                                    <small class="text-muted">{{ $item->created_at->diffForHumans() }}</small>
+                                </a>
+                            </div>
+                            <img src="{{ $item->image }}" alt="{{ $item->title }}" class="ms-3" style="width: 80px; height: 80px; object-fit: cover;">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </main>
+
+   <!-- Footer -->
+   <footer class="custom-footer" style="background: #D9D9D9; padding-top: 10px;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <img src="{{ asset('image/WinniCode.png') }}" alt="WinNews" class="me-3" style="width: 100%; height: auto;">
+                    <h3 class="mb-0">WinniCode Garuda Teknologi</h3>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <h5>Contact Us:</h5>
+                    <p>
+                        <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://winnicode.com/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-globe me-2"></i>WinniCode
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-3 bg-primary text-white">&copy; 2024 PT WinniCode Garuda Indonesia, All rights reserved</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinNews</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+</head>
+<body>
+    <!-- Header -->
+    <header class="custom-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="image/News.png" alt="WinNews Logo" class="me-3">
+            </div>
+            <nav class="nav">
+                <a class="deactive" href="{{ route('home') }}">Home</a>
+                <a class="deactive" href="{{ route('news') }}">News</a>
+                <a class="deactive" href="{{ route('domestic') }}">Domestic</a>
+                <a class="active" href="{{ route('trending') }}">Trending</a>
+            </nav>
+            <form class="d-flex ms-3">
+                <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container-fluid px-5 my-4" style="padding-top: 75px;">
+        <!-- Daftar Berita -->
+        <div class="row">
+            <div class="col-12">
+                <div class="list-group w-100">
+                    @foreach ($news as $index => $item)
+                    <div class="list-group-item d-flex justify-content-between align-items-center border rounded mb-3 p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                                    <span class="badge rounded-circle" style="font-size: 1.2rem; background-color: {{ $index == 0 ? 'gold' : ($index == 1 ? 'silver' : ($index == 2 ? '#cd7f32' : 'primary')) }};">
+                                        {{ $index + 1 }}
+                                    </span>
+                                </a>
+                            </div>
+                            <div>
+                                <p class="fw-bold mb-1">{{ $item->title }}</p>
+                                <small class="text-muted">{{ $item->created_at->diffForHumans() }}</small>
+                            </div>
+                        </div>
+                        <img src="{{ asset($item->image) }}" alt="{{ $item->title }}" class="ms-3" style="width: 80px; height: 80px;">
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer" style="background: #D9D9D9; padding-top: 10px;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <img src="{{ asset('image/WinniCode.png') }}" alt="WinNews" class="me-3" style="width: 100%; height: auto;">
+                    <h3 class="mb-0">WinniCode Garuda Teknologi</h3>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <h5>Contact Us:</h5>
+                    <p>
+                        <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://winnicode.com/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-globe me-2"></i>WinniCode
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-3 bg-primary text-white">&copy; 2024 PT WinniCode Garuda Indonesia, All rights reserved</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinNews</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+</head>
+<body>
+    <!-- Header -->
+    <header class="custom-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="image/News.png" alt="WinNews Logo" class="me-3">
+            </div>
+            <nav class="nav">
+                <a class="deactive" href="{{ route('home') }}">Home</a>
+                <a class="deactive" href="{{ route('news') }}">News</a>
+                <a class="active" href="{{ route('domestic') }}">Domestic</a>
+                <a class="deactive" href="{{ route('trending') }}">Trending</a>
+            </nav>
+            <form class="d-flex ms-3">
+                <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4 custom-main" style="padding-top: 75px;">
+        <section class="row mb-4">
+            <!-- Featured News -->
+            @if ($news->isNotEmpty())
+                <div class="col-md-12 mb-3">
+                    <a href="{{ route('detail', $news[0]->id) }}" class="text-decoration-none text-dark">
+                        <div class="featured-news position-relative">
+                            <img src="{{ asset($news[0]->image) }}" alt="Featured News" class="img-fluid w-100">
+                            <div class="featured-caption position-absolute text-white p-3" style="bottom: 0; background: rgba(0, 0, 0, 0.5);">
+                                <h5>{{ $news[0]->title }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endif
+
+            <!-- News Grid -->
+            <div class="row g-3">
+                @foreach ($news->skip(1) as $item)
+                    <div class="col-md-3">
+                        <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                            <div class="card">
+                                <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->title }}">
+                                <div class="card-body">
+                                    <p class="card-text">{{ $item->title }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    </main>
+
+ <!-- Footer -->
+ <footer class="custom-footer" style="background: #D9D9D9; padding-top: 10px;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <img src="{{ asset('image/WinniCode.png') }}" alt="WinNews" class="me-3" style="width: 100%; height: auto;">
+                    <h3 class="mb-0">WinniCode Garuda Teknologi</h3>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <h5>Contact Us:</h5>
+                    <p>
+                        <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://winnicode.com/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-globe me-2"></i>WinniCode
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-3 bg-primary text-white">&copy; 2024 PT WinniCode Garuda Indonesia, All rights reserved</p>
+    </footer>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinNews</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+</head>
+<body>
+    <header class="custom-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <!-- Logo -->
+            <div class="d-flex align-items-center">
+                <img src="{{ asset('image/News.png') }}"  alt="WinNews Logo" class="me-3">
+            </div>
+            
+            <!-- Navigation Links -->
+            <nav class="nav">
+                <a class="deactive" href="{{ route('home') }}">Home</a>
+                <a class="deactive" href="{{ route('news') }}">News</a>
+                <a class="deactive" href="{{ route('domestic') }}">Domestic</a>
+                <a class="deactive" href="{{ route('trending') }}">Trending</a>
+            </nav>
+
+            <!-- Search Bar -->
+            <form class="d-flex ms-3">
+                <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+<main class="container my-4" style="padding-top: 75px;">
+    <!-- Konten Utama -->
+    <section class="col-md-8">
+        <div class="card mb-4">
+            @if ($news->image)
+                <img src="{{ asset($news->image) }}" alt="{{ $news->title }}" class="card-img-top">
+            @endif
+            <div class="card-body">
+                <h5 class="card-title fw-bold">
+                    {{ $news->title }}
+                </h5>
+                <p class="card-text">
+                    {{ $news->content }}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sidebar (Latest News) -->
+    <aside class="col-md-4">
+        <h3 class="mb-3">Latest News</h3>
+        <ul class="list-group list-group-flush">
+            @foreach ($latestNews as $item)
+                <li class="list-group-item">
+                    <a href="{{ route('detail', $item->id) }}" class="text-decoration-none text-dark">
+                        {{ $item->title }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </aside>
+</main>
+
+
+ <!-- Footer -->
+ <footer class="custom-footer" style="background: #D9D9D9; padding-top: 10px;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <img src="{{ asset('image/WinniCode.png') }}" alt="WinNews" class="me-3" style="width: 100%; height: auto;">
+                    <h3 class="mb-0">WinniCode Garuda Teknologi</h3>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <h5>Contact Us:</h5>
+                    <p>
+                        <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://winnicode.com/" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-globe me-2"></i>WinniCode
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-3 bg-primary text-white">&copy; 2024 PT WinniCode Garuda Indonesia, All rights reserved</p>
+    </footer>
+</body>
+</html>
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
+
+class ProfileController extends Controller
+{
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Request $request): View
+    {
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
+}
+<?php
+namespace App\Http\Controllers;
+
+use App\Models\News;
+use App\Models\Category; 
+use Illuminate\Support\Facades\Storage;
+
+class NewsController extends Controller
+{
+    public function index()
+    {
+        $news = News::with('author', 'category')->paginate(10); // Muat relasi author dan category
+        $categories = Category::all(); // Ambil semua kategori
+        return view('admin.news.index', compact('news', 'categories'));
+    }
+
+    public function trending()
+    {
+        $trendingNews = News::orderBy('created_at', 'desc')->limit(5)->get();
+        return view('trending', ['news' => $trendingNews]);
+    }
+
+    public function domestic()
+    {
+        $domesticNews = News::where('category_id', 2)->get(); // Contoh untuk kategori tertentu
+        return view('domestic', ['news' => $domesticNews]);
+    }
+
+    public function show($id)
+    {
+        $news = News::findOrFail($id); // Ambil berita berdasarkan ID
+        $latestNews = News::latest()->take(5)->get(); // Ambil 5 berita terbaru
+    
+        return view('detail', compact('news', 'latestNews'));
+    }
+    public function news()
+    {
+        $news = News::with('author', 'category')->paginate(10); // Muat relasi author dan category
+        $categories = Category::all(); // Ambil semua kategori
+        return view('news', compact('news', 'categories'));
+    }
+}
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\News;
+
+class IndexController extends Controller
+{
+    public function index()
+    {
+        // Ambil berita utama (berita terbaru)
+        $mainNews = News::latest()->first();
+
+        // Ambil 4 berita lainnya untuk grid
+        $news = News::latest()->skip(1)->take(4)->get();
+
+        // Ambil berita terbaru untuk sidebar
+        $latestNews = News::latest()->take(5)->get();
+
+        return view('index', [
+            'mainNews' => $mainNews,
+            'news' => $news,
+            'latestNews' => $latestNews,
+        ]);
+    }
+}
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\News;
+use App\Models\Category;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        $news = News::with('category')->paginate(10);
+        $categories = Category::all(); // Mengambil semua kategori dari database
+        return view('dashboard', compact('news', 'categories'));
+    }
+}
+<?php
+
+namespace App\Http\Controllers;
+
+abstract class Controller
+{
+    //
+}
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    public function index()
+    {
+        return Category::all();
+    }
+
+    public function show($id)
+    {
+        return Category::with('news')->findOrFail($id);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(['name' => 'required|unique:categories']);
+        return Category::create($request->all());
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        $category->update($request->all());
+        return $category;
+    }
+
+    public function destroy($id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return response()->json(['message' => 'Category deleted successfully']);
+    }
+}
+
+<?php
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\News;
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class NewsController extends Controller
+{
+    public function index()
+    {
+        $news = News::with('author', 'category')->paginate(10);
+        $categories = Category::all();
+    
+        return view('dashboard', compact('news', 'categories'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validasi data
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'content' => 'required|string',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        // Simpan file ke folder public/image
+        $photo = $request->file('photo');
+        $photoPath = 'image/' . time() . '_' . $photo->getClientOriginalName();
+        $photo->move(public_path('image'), $photoPath);
+    
+        // Simpan data ke database
+        News::create([
+            'title' => $request->title,
+            'author' => $request->author,
+            'content' => $request->content,
+            'image' => $photoPath,
+            'category_id' => $request->category_id,
+        ]);
+    
+        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
+            'content' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $news = News::findOrFail($id);
+
+        // Perbarui data berita
+        $news->title = $request->input('title');
+        $news->author = $request->input('author');
+        $news->category_id = $request->input('category_id');
+        $news->content = $request->input('content');
+
+        // Periksa apakah ada file baru
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($news->image && file_exists(public_path($news->image))) {
+                unlink(public_path($news->image));
+            }
+
+            // Simpan foto baru ke folder public/image
+            $photo = $request->file('photo');
+            $photoPath = 'image/' . time() . '_' . $photo->getClientOriginalName();
+            $photo->move(public_path('image'), $photoPath);
+            $news->image = $photoPath;
+        }
+
+        $news->save();
+
+        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $news = News::findOrFail($id);
+
+        // Hapus file gambar jika ada
+        if ($news->image && file_exists(public_path($news->image))) {
+            unlink(public_path($news->image));
+        }
+
+        $news->delete();
+
+        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');
+    }
+}
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
+
+// Route untuk halaman utama
+Route::get('/', [IndexController::class, 'index'])->name('home');
+
+// Route untuk halaman News
+Route::get('/news', [NewsController::class, 'news'])->name('news');
+
+// Route untuk halaman Domestic
+Route::get('/domestic', [NewsController::class, 'domestic'])->name('domestic');
+
+// Route untuk halaman Trending
+Route::get('/trending', [NewsController::class, 'trending'])->name('trending');
+
+// Route untuk halaman Detail
+Route::get('/detail/{id}', [NewsController::class, 'show'])->name('detail');
+
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/admin/news', AdminNewsController::class);
+});
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('news', AdminNewsController::class);
+});
+
+Route::delete('/admin/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+
